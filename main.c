@@ -19,7 +19,7 @@ int optimal(int* ref_str, int size, int limit){
   for(i = 0; i < size;i++)
     frames[i] = -1;//empty
   for(i = 0, cur = 0; i < size;i++,cur++){
-    //filling out the whole physical memory (frames array) test
+    //filling out the whole physical memory (frames array)
     page_no = ref_str[cur];
     frame_no = locate(frames,size, page_no);
     if(frame_no + 1)//already exists
