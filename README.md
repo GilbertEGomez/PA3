@@ -1,6 +1,6 @@
 # PA3---COP4610
 Compare the performance of page replacement algorithms for fixed numbers of frames: optimal, FIFO, LRU, second chance.
-- Github: https://github.com/nosgnille05/PA2---COP4610
+- Github: https://github.com/GilbertEGomez/PA3---COP4610
 
 # Group members with panther IDs:
 
