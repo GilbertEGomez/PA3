@@ -1,9 +1,9 @@
 #Ignore file types
-.exe
-.d
-.o
-.file
-.breakpoints
+*.exe
+*.d
+*.o
+*.file
+*.breakpoints
 #Ignored cache directories
 .ccls-cache
 .vscode
