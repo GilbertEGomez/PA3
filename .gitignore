@@ -3,7 +3,7 @@
 *.d
 *.o
 *.file
-*.breakpoints
+.breakpoints
 #Ignored cache directories
 .ccls-cache
 .vscode
