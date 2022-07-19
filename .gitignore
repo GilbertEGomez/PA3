@@ -4,7 +4,7 @@
 *.o
 *.file
 .breakpoints
-#Ignored cache directories
+#Ignore cache directories
 .ccls-cache
 .ccls-cache/*
 .ccls-cache/
