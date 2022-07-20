@@ -15,7 +15,7 @@ Compare the performance of page replacement algorithms for fixed numbers of fram
 ---
 - Tanner: 
 - Lisa Shrestha: 
-- Gilbert Gomez: 
+- Gilbert Gomez: FIFO
 ---
 
 # Meeting Dates:
