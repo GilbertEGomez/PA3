@@ -56,6 +56,51 @@ int optimal(int* ref_str, int size, int limit){
   
   return page_faults;
 }
+
+int FIFO(int* ref_str, int size, int limit){
+  //size is the # of frames allocated for the process
+  //limit is the max # of cells that we look ahead in the RS to implement the optimal algorithm
+  //initialize
+  int page_faults = size;
+  int frames[size], i, cur, page_no, frame_no;
+  for(i = 0; i < size;i++)
+    frames[i] = -1;//empty
+  for(i = 0, cur = 0; i < size;i++,cur++){
+    //filling out the whole physical memory (frames array)
+    page_no = ref_str[cur];
+    frame_no = locate(frames,size, page_no);
+    if(frame_no == -1) // If the memory is free, insert the page into the frame.
+      frames[i] = page_no;
+  }
+  //main loop
+  for(;cur < 1000000;cur++){
+    page_no = ref_str[cur];
+    frame_no = locate(frames, size, page_no);
+    if(frame_no != -1)//already exists
+      continue;
+    page_faults++;
+    //This is the very first line that is differnet in other algorithms
+    unsigned unused = (1<<size) - 1;
+    int victim;
+    for(int k = 1; k <= limit && unused && k < 1000000; k++){
+      victim = locate(frames, size, ref_str[k]);
+      if(victim == -1)
+        continue;
+      unused &= ~(1<<victim);
+    }
+    if(!unused)
+      frames[victim] = page_no;
+    else{
+      victim = 0;
+      while(unused % 2 == 0)
+        unused = unused >> 1, victim++;
+      frames[victim] = page_no;
+    }    
+  } 
+  
+  return page_faults;
+}
+
 int main(int argc, char** argv) {
   int e, m, P;
   double t;
@@ -100,6 +145,8 @@ int main(int argc, char** argv) {
     }
   }
   int optimal_page_fault = optimal(ref_str, FRAME_NO, e * m);
+  int FIFO_page_fault = FIFO(ref_str, FRAME_NO, e * m);
   printf("Optimal page replacement causes %d page faults\n", optimal_page_fault);
+  printf("FIFO page replacement causes %d page faults\n", FIFO_page_fault);
   return 0;
 }
