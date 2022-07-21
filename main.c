@@ -83,7 +83,7 @@ int FIFO(int* ref_str, int size, int limit){
     unsigned unused = (1<<size) - 1;
     int victim;
     for(int k = 1; k <= limit && unused && k < 1000000; k++){
-      victim = locate(frames, size, ref_str[k]);
+      victim = locate(frames, size, ref_str[k]); // If next memory is not free, then select it first, FIFO
       if(victim == -1)
         continue;
       unused &= ~(1<<victim);
