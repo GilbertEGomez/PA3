@@ -13,8 +13,8 @@ Compare the performance of page replacement algorithms for fixed numbers of fram
 # Assigned Tasks:
 
 ---
-- Tanner: 
-- Lisa Shrestha: 
+- Tanner: LRU, Second Chance
+- Lisa Shrestha: Second Chance
 - Gilbert Gomez: FIFO
 ---
 
