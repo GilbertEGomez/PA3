@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
   }
   int optimal_page_fault = optimal(ref_str, FRAME_NO, e * m);
   int FIFO_page_fault = FIFO(ref_str, FRAME_NO, e * m);
-  //printf("Optimal page replacement causes %d page faults\n", optimal_page_fault);
+  printf("Optimal page replacement causes %d page faults\n", optimal_page_fault);
   printf("FIFO page replacement causes %d page faults\n", FIFO_page_fault);
   return 0;
 }
