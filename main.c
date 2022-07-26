@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "pa1.h"
 #define FRAME_NO 10
 #define lrand() rand()*RAND_MAX + rand()
 int locate(int* frames, int size, int page_no){
@@ -63,52 +64,12 @@ int FIFO(int* ref_str, int size, int limit){
   //initialize
   int page_faults = size;
   int frames[size], i, cur, page_no, frame_no;
+  lnklst_queue queue = create_queue2();
   for(i = 0; i < size;i++)
+  {
     frames[i] = -1;//empty
-  for(i = 0, cur = 0; i < size;i++,cur++){
-    //filling out the whole physical memory (frames array)
-    page_no = ref_str[cur];
-    frame_no = locate(frames,size, page_no);
-    if(frame_no == -1) // If the memory is free, insert the page into the frame.
-      frames[i] = page_no;
+    enqueue2(&queue, i); // Enqueue all indexes to frame array (FIFO)
   }
-  //main loop
-  for(;cur < 1000000;cur++){
-    page_no = ref_str[cur];
-    frame_no = locate(frames, size, page_no);
-    if(frame_no != -1)//already exists
-      continue;
-    page_faults++;
-    //This is the very first line that is differnet in other algorithms
-    unsigned unused = (1<<size) - 1;
-    int victim;
-    for(int k = 1; k <= limit && unused && k < 1000000; k++){
-      victim = locate(frames, size, ref_str[k]); // If next memory is not free, then select it first, FIFO
-      if(victim == -1)
-        continue;
-      unused &= ~(1<<victim);
-    }
-    if(!unused)
-      frames[victim] = page_no;
-    else{
-      victim = 0;
-      while(unused % 2 == 0)
-        unused = unused >> 1, victim++;
-      frames[victim] = page_no;
-    }    
-  } 
-  
-  return page_faults;
-}
-
-int lru(int* ref_str, int size, int limit){
-  //size is the # of frames allocated for the process
-  //limit is the max # of cells that we look ahead in the RS to implement the optimal algorithm
-  //initialize
-  int page_faults = size;
-  int frames[size], i, cur, page_no, frame_no;
-  for(i = 0; i < size;i++)
-    frames[i] = -1;//empty
   for(i = 0, cur = 0; i < size;i++,cur++){
     //filling out the whole physical memory (frames array)
     page_no = ref_str[cur];
@@ -124,26 +85,11 @@ int lru(int* ref_str, int size, int limit){
     frame_no = locate(frames, size, page_no);
     if(frame_no != -1)//already exists
       continue;
-    //look at ref_str[cur+1:cur+limit] to see which one has not been referred to the longest in the future
     page_faults++;
-    //This is the very first line that is differnet in other algorithms
-    unsigned unused = (1<<size) - 1;
-    int victim;
-    for(int k = 1; k <= limit && unused && cur - k >= 0;k++){
-      victim = locate(frames, size, ref_str[cur - k]);
-      if(victim == -1)
-        continue;
-      unused &= ~(1<<victim);
-    }
-    if(!unused)
-      frames[victim] = page_no;
-    else{
-      victim = 0;
-      while(unused % 2 == 0)
-        unused = unused >> 1, victim++;
-      frames[victim] = page_no;
-    }    
-  } 
+    int index = dequeue2(&queue); // Dequeue the index of the page fault
+    frames[index] = page_no; //use the temp variable index which is the last item in FIFO, to reference the frame array and index the page #.
+    enqueue2(&queue, index); // Enqueue index
+  }
   
   return page_faults;
 }
@@ -193,15 +139,7 @@ int main(int argc, char** argv) {
   }
   int optimal_page_fault = optimal(ref_str, FRAME_NO, e * m);
   int FIFO_page_fault = FIFO(ref_str, FRAME_NO, e * m);
-  int lru_page_fault = lru(ref_str, FRAME_NO, e * m);
-  printf("Optimal page replacement causes %d page faults\n", optimal_page_fault);
+  //printf("Optimal page replacement causes %d page faults\n", optimal_page_fault);
   printf("FIFO page replacement causes %d page faults\n", FIFO_page_fault);
-  printf("LRU page replacement causes %d page faults\n", lru_page_fault);
   return 0;
 }
-//Scenario 1-5
-//./main -P 1048576 -e 10 -m 20 -t 1000
-//./main -P 4194304 -e 10 -m 20 -t 2000
-//./main -P 1048576 -e 15 -m 20 -t 1000
-//./main -P 4194304 -e 8 -m 50 -t 1000
-//./main -P 262144 -e 15 -m 7 -t 2000
