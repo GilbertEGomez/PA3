@@ -66,8 +66,10 @@ int FIFO(int* ref_str, int size, int limit){
   int frames[size], i, cur, page_no, frame_no;
   lnklst_queue queue = create_queue2();
   for(i = 0; i < size;i++)
+  {
     frames[i] = -1;//empty
     enqueue2(&queue, i); // Enqueue all indexes to frame array (FIFO)
+  }
   for(i = 0, cur = 0; i < size;i++,cur++){
     //filling out the whole physical memory (frames array)
     page_no = ref_str[cur];
@@ -85,7 +87,7 @@ int FIFO(int* ref_str, int size, int limit){
       continue;
     page_faults++;
     int index = dequeue2(&queue); // Dequeue the index of the page fault
-    frames[index] = page_no;
+    frames[index] = page_no; //use the temp variable index which is the last item in FIFO, to reference the frame array and index the page #.
     enqueue2(&queue, index); // Enqueue index
   }
   
