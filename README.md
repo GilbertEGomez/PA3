@@ -21,8 +21,8 @@ Compare the performance of page replacement algorithms for fixed numbers of fram
 # Meeting Dates:
 
 ---
-1. 
-2. 
+1. 7/24/2022 @ 3:00PM-4:00PM Est (1 hour) (Assigning Tasks)
+2. 7/28/2022 @ 1:00PM-2:00PM Est (1 hour) (Polishing and bug fixing)
   
   
 **Note: We coressponded daily on a what's app group chat**
